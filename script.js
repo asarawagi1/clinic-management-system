@@ -1,26 +1,74 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const patientForm = document.getElementById('patientForm');
-    const patientList = document.getElementById('patientList').getElementsByTagName('tbody')[0];
-    
-    patientForm.addEventListener('submit', function(event) {
-        event.preventDefault();
+/* Existing styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
 
-        // Get form values
-        const name = document.getElementById('name').value;
-        const age = document.getElementById('age').value;
-        const gender = document.getElementById('gender').value;
-        const diagnosis = document.getElementById('diagnosis').value;
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
 
-        // Create a new row
-        const newRow = patientList.insertRow();
+h1 {
+    text-align: center;
+    color: #333;
+}
 
-        // Insert cells
-        newRow.insertCell(0).textContent = name;
-        newRow.insertCell(1).textContent = age;
-        newRow.insertCell(2).textContent = gender;
-        newRow.insertCell(3).textContent = diagnosis;
+.form-section, .list-section {
+    background: #fff;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
 
-        // Clear form fields
-        patientForm.reset();
-    });
-});
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin: 10px 0 5px;
+}
+
+input, select, button {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+thead {
+    background-color: #f2f2f2;
+}
+
+/* New styles for appointment section */
+input[type="date"], input[type="time"] {
+    max-width: 200px;
+}
