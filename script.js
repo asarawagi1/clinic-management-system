@@ -1,74 +1,79 @@
-/* Existing styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const patientForm = document.getElementById('patientForm');
+    const patientList = document.getElementById('patientList').getElementsByTagName('tbody')[0];
+    
+    const appointmentForm = document.getElementById('appointmentForm');
+    const appointmentList = document.getElementById('appointmentList').getElementsByTagName('tbody')[0];
+    
+    // Fetch and display patients
+    function fetchPatients() {
+        fetch('/patients')
+            .then(response => response.json())
+            .then(data => {
+                patientList.innerHTML = '';
+                data.forEach(patient => {
+                    const newRow = patientList.insertRow();
+                    newRow.insertCell(0).textContent = patient.name;
+                    newRow.insertCell(1).textContent = patient.age;
+                    newRow.insertCell(2).textContent = patient.gender;
+                    newRow.insertCell(3).textContent = patient.diagnosis;
+                });
+            });
+    }
+    
+    // Fetch and display appointments
+    function fetchAppointments() {
+        fetch('/appointments')
+            .then(response => response.json())
+            .then(data => {
+                appointmentList.innerHTML = '';
+                data.forEach(appointment => {
+                    const newRow = appointmentList.insertRow();
+                    newRow.insertCell(0).textContent = appointment.patientName;
+                    newRow.insertCell(1).textContent = appointment.date;
+                    newRow.insertCell(2).textContent = appointment.time;
+                    newRow.insertCell(3).textContent = appointment.doctor;
+                });
+            });
+    }
 
-.container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
-}
+    // Handle patient form submission
+    patientForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const name = document.getElementById('name').value;
+        const age = document.getElementById('age').value;
+        const gender = document.getElementById('gender').value;
+        const diagnosis = document.getElementById('diagnosis').value;
 
-h1 {
-    text-align: center;
-    color: #333;
-}
+        fetch('/patients', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, age, gender, diagnosis })
+        }).then(() => {
+            fetchPatients();
+            patientForm.reset();
+        });
+    });
 
-.form-section, .list-section {
-    background: #fff;
-    padding: 20px;
-    margin: 20px 0;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
+    // Handle appointment form submission
+    appointmentForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const patientName = document.getElementById('patientName').value;
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+        const doctor = document.getElementById('doctor').value;
 
-form {
-    display: flex;
-    flex-direction: column;
-}
+        fetch('/appointments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ patientName, date, time, doctor })
+        }).then(() => {
+            fetchAppointments();
+            appointmentForm.reset();
+        });
+    });
 
-label {
-    margin: 10px 0 5px;
-}
-
-input, select, button {
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-button {
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #218838;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-table, th, td {
-    border: 1px solid #ddd;
-}
-
-th, td {
-    padding: 10px;
-    text-align: left;
-}
-
-thead {
-    background-color: #f2f2f2;
-}
-
-/* New styles for appointment section */
-input[type="date"], input[type="time"] {
-    max-width: 200px;
-}
+    // Initial fetch to display data
+    fetchPatients();
+    fetchAppointments();
+});
